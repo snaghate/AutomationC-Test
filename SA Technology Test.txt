@@ -1,0 +1,157 @@
+Question 1: Confirm accessibility of the top-level menus: Home, Our Story, Our Solution, and Why Tendable.     
+Script:  
+             using (IWebDriver driver = new ChromeDriver())
+            {
+                
+                driver.Navigate().GoToUrl("https://www.tendable.com");
+
+                
+                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+
+              
+                try
+                {
+                    IWebElement homeMenu = wait.Until(drv => drv.FindElement(By.XPath("//a[text()='Home']")));
+                    Console.WriteLine("Home menu is accessible.");
+                }
+                catch (NoSuchElementException)
+                {
+                    Console.WriteLine("Home menu is NOT accessible.");
+                }
+
+                
+                try
+                {
+                    IWebElement ourStoryMenu = wait.Until(drv => drv.FindElement(By.XPath("//a[text()='Our Story']")));
+                    Console.WriteLine("Our Story menu is accessible.");
+                }
+                catch (NoSuchElementException)
+                {
+                    Console.WriteLine("Our Story menu is NOT accessible.");
+                }
+
+               
+                try
+                {
+                    IWebElement ourSolutionMenu = wait.Until(drv => drv.FindElement(By.XPath("//a[text()='Our Solution']")));
+                    Console.WriteLine("Our Solution menu is accessible.");
+                }
+                catch (NoSuchElementException)
+                {
+                    Console.WriteLine("Our Solution menu is NOT accessible.");
+                }
+
+               
+                try
+                {
+                    IWebElement whyTendableMenu = wait.Until(drv => drv.FindElement(By.XPath("//a[text()='Why Tendable']")));
+                    Console.WriteLine("Why Tendable menu is accessible.");
+                }
+                catch (NoSuchElementException)
+                {
+                    Console.WriteLine("Why Tendable menu is NOT accessible.");
+                }
+
+                
+                driver.Quit();
+            }
+			
+			
+			
+==================================================================================================
+Question 2: Verify that the "Request a Demo" button is present and active on each of the
+aforementioned top-level menu pages.
+Script:
+                   try
+
+                    {
+                        IWebElement requestDemoButton = wait.Until(drv => drv.FindElement(By.XPath("//button[text()='Request a Demo']")));
+                        if (requestDemoButton.Displayed && requestDemoButton.Enabled)
+                        {
+                            Console.WriteLine($"On page '{page}', 'Request a Demo' button is present and active.");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"On page '{page}', 'Request a Demo' button is either not visible or not enabled.");
+                        }
+                    }
+                    catch (NoSuchElementException)
+                    {
+                        Console.WriteLine($"On page '{page}', 'Request a Demo' button is NOT present.");
+                    }
+                }
+				
+================================================================================================
+Question 3: Navigate to the "Contact Us" section, choose "Marketing", and complete the form—
+excluding the "Message" field. On submission, an error should arise. Ensure your script
+confirms the error message's appearance. If the error is displayed, mark the test as PASS. If
+absent, it's a FAIL.
+
+Script: 
+using (IWebDriver driver = new ChromeDriver())
+            {
+               
+                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+
+              
+                string contactUsUrl = "https://www.tendable.com/contact-us";
+
+                driver.Navigate().GoToUrl(contactUsUrl);
+
+               // wait.Until(drv => drv.FindElement(By.Id("contactForm")));
+
+               
+                try
+                {
+                    IWebElement nameField = driver.FindElement(By.Name("fullName")); 
+					IWebElement orgField = driver.FindElement(By.Name("organisationName"));
+                    IWebElement phoneField = driver.FindElement(By.Name("cellPhone")); 
+                    IWebElement emailField = driver.FindElement(By.Name("email"));   jobRole
+					IWebElement jobRoleField = driver.FindElement(By.Name("jobRole"));
+
+                    nameField.SendKeys("John");
+                    orgField.SendKeys("XYZ");
+                    phoneField.SendKeys("123-456-7890");
+					emailField.SendKeys("john@example.com");
+					jobRoleField.SendKeys("QA");
+                }
+                catch (NoSuchElementException)
+                {
+                    Console.WriteLine("One or more form fields are missing.");
+                    driver.Quit();
+                    return;
+                }
+
+                // Submit the form
+                try
+                {
+                    IWebElement submitButton = driver.FindElement(By.Class("button")); 
+                    submitButton.Click();
+                }
+                catch (NoSuchElementException)
+                {
+                    Console.WriteLine("Submit button is not present.");
+                    driver.Quit();
+                    return;
+                }
+
+               
+                try
+                {
+                    IWebElement errorMessage = wait.Until(drv => drv.FindElement(By.XPAth(//*[text='Sorry, there was an error submitting the form. Please try again.']))); 
+                    if (errorMessage.Displayed)
+                    {
+                        Console.WriteLine("Test PASS: Error message is displayed.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Test FAIL: Error message is not displayed.");
+                    }
+                }
+                catch (NoSuchElementException)
+                {
+                    Console.WriteLine("Test FAIL: Error message is not displayed.");
+                }
+              
+                driver.Quit();
+            }
